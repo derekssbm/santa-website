@@ -9,6 +9,10 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+		backgroundImage: {
+			'bg': "url('../../public/resources/bgimage.jpg')",
+			'santa': "url('../../public/resources/bgimage.jpg')",
+		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
