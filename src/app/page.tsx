@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { ParallaxProvider, Parallax } from "react-scroll-parallax";
+import { motion, useAnimation, useScroll, useTransform } from "framer-motion";
 import { FaArrowDown } from "react-icons/fa";
 import NavBar from "@/components/NavBar";
-import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
 import santa from "../../public/resources/santa.jpg";
@@ -13,9 +13,10 @@ import BlogList from "@/components/BlogList";
 import FAQ from "@/components/FAQ";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
+import AnimatedBackground from "@/components/AnimatedBackground";
 
 export default function Home() {
-  const [activeSection, setActiveSection] = useState<string>("home");
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,17 +37,15 @@ export default function Home() {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    if (sectionId) {
-      const section = document.getElementById(sectionId);
-      if (section) {
-        section.scrollIntoView({ behavior: "smooth" });
-      } else {
-        console.warn(`Section with id "${sectionId}" not found`);
-      }
-    } else {
-      console.warn("No sectionId provided to scrollToSection function");
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const { scrollYProgress } = useScroll();
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const textControls = useAnimation();
   const imageControls = useAnimation();
@@ -115,31 +114,51 @@ export default function Home() {
   return (
     <ParallaxProvider>
       <NavBar activeSection={activeSection} scrollToSection={scrollToSection} />
+      <AnimatedBackground />
 
       <main className="pt-16 overflow-hidden">
         <section
           id="home"
-          className="h-screen flex flex-col justify-center items-center bg-gradient-to-r from-orange-500 to-blue-500 text-white"
+          className="relative h-screen flex flex-col justify-center items-center text-white"
         >
-          <Parallax translateY={[-20, 20]} className="text-center">
-            <h1 className="text-8xl font-bold font-righteous mb-4">
+          <motion.div
+            className="text-center"
+            style={{ scale, opacity }}
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          >
+            <motion.h1
+              className="text-8xl font-bold font-righteous mb-4 text-shadow-lg"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+            >
               Welcome to Solaris
-            </h1>
-            <p className="text-xl italic">
+            </motion.h1>
+            <motion.p
+              className="text-xl italic text-shadow-md"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
               "Empowering digital innovation, one project at a time."
-            </p>
-          </Parallax>
-          <Parallax speed={5} className="absolute bottom-10">
-            <div className="flex flex-col items-center">
-              <FaArrowDown className="text-3xl animate-bounce" />
-              <span className="mt-2 text-lg">Scroll Down</span>
-            </div>
-          </Parallax>
+            </motion.p>
+          </motion.div>
+          <motion.div
+            className="absolute bottom-10 flex flex-col items-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+          >
+            <FaArrowDown className="text-3xl animate-bounce text-shadow-md" />
+            <span className="mt-2 text-lg text-shadow-md">Scroll Down</span>
+          </motion.div>
         </section>
 
         <section
           id="about"
-          className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-r from-orange-500 to-blue-500 p-8"
+          className="min-h-screen flex flex-col md:flex-row items-center justify-center p-8"
         >
           <motion.div
             ref={textRef}
@@ -148,10 +167,10 @@ export default function Home() {
             animate={textControls}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl font-righteous mb-6">
+            <h2 className="text-4xl font-righteous mb-6 text-shadow-lg">
               About Solrise Agency
             </h2>
-            <p className="mb-4">
+            <p className="mb-4 text-shadow-md">
               Solrise Agency es una agencia de marketing digital, especializada
               en potenciar negocios e-commerce a través de estrategias
               detalladas y personalizadas. Entendemos que cada empresa es única,
@@ -159,7 +178,7 @@ export default function Home() {
               acción accesibles que los negocios pueden implementar por sí
               mismos, con nuestra guía y asesoramiento continuo.
             </p>
-            <p className="mb-4">
+            <p className="mb-4 text-shadow-md">
               Desarrollamos estrategias de Customer Journey personalizadas a la
               audiencia de cada cliente. Desde SEO y SEM, email marketing, hasta
               campañas publicitarias y planificación de redes sociales,
@@ -167,7 +186,7 @@ export default function Home() {
               digitales de tu empresa, asegurando que cada acción esté alineada
               con tus objetivos comerciales.
             </p>
-            <p className="mb-4">
+            <p className="mb-4 text-shadow-md">
               Nos enorgullece no solo desarrollar estrategias efectivas sino
               también acompañar a nuestros clientes durante todo el proceso de
               implementación y realizar ajustes periódicos basados en análisis
@@ -175,7 +194,7 @@ export default function Home() {
               marketing de calidad, ofrecemos la opción de implementar las
               estrategias por completo.
             </p>
-            <p>
+            <p className="text-shadow-md">
               También nos apasiona proporcionar información y educar a nuestros
               clientes sobre aspectos clave del marketing digital en el ámbito
               del e-commerce. Ya sea que seas una startup o una empresa bien
@@ -197,7 +216,7 @@ export default function Home() {
                 alt="Santa's image"
                 layout="fill"
                 objectFit="cover"
-                className="rounded-lg"
+                className="rounded-lg shadow-lg"
               />
             </div>
           </motion.div>
@@ -205,7 +224,7 @@ export default function Home() {
 
         <section
           id="services"
-          className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-500 to-orange-500 p-8"
+          className="min-h-screen flex flex-col justify-center items-center p-8"
         >
           <motion.div
             ref={servicesRef}
@@ -214,19 +233,19 @@ export default function Home() {
             variants={servicesVariants}
             className="w-full max-w-6xl"
           >
-            <h2 className="text-5xl font-bold text-white text-center mb-12">
+            <h2 className="text-5xl font-bold text-white text-center mb-12 text-shadow-lg">
               Our Services
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <motion.div
                 variants={itemVariants}
-                className="bg-white bg-opacity-10 p-6 rounded-lg"
+                className="bg-white bg-opacity-10 p-6 rounded-lg shadow-lg"
               >
-                <h3 className="text-2xl font-semibold text-white mb-4">
+                <h3 className="text-2xl font-semibold text-white mb-4 text-shadow-md">
                   Strategic Planning
                 </h3>
                 <div className="w-full h-px bg-white mb-4"></div>
-                <p className="text-white">
+                <p className="text-white text-shadow-sm">
                   Comprehensive market analysis and tailored action plans for
                   e-commerce businesses. We provide accessible strategies that
                   businesses can implement with our ongoing guidance.
@@ -234,13 +253,13 @@ export default function Home() {
               </motion.div>
               <motion.div
                 variants={itemVariants}
-                className="bg-white bg-opacity-10 p-6 rounded-lg"
+                className="bg-white bg-opacity-10 p-6 rounded-lg shadow-lg"
               >
-                <h3 className="text-2xl font-semibold text-white mb-4">
+                <h3 className="text-2xl font-semibold text-white mb-4 text-shadow-md">
                   Digital Marketing
                 </h3>
                 <div className="w-full h-px bg-white mb-4"></div>
-                <p className="text-white">
+                <p className="text-white text-shadow-sm">
                   Full-spectrum digital marketing services including SEO, SEM,
                   email marketing, and social media planning. We ensure all
                   actions align with your business objectives.
@@ -248,13 +267,13 @@ export default function Home() {
               </motion.div>
               <motion.div
                 variants={itemVariants}
-                className="bg-white bg-opacity-10 p-6 rounded-lg"
+                className="bg-white bg-opacity-10 p-6 rounded-lg shadow-lg"
               >
-                <h3 className="text-2xl font-semibold text-white mb-4">
+                <h3 className="text-2xl font-semibold text-white mb-4 text-shadow-md">
                   Customer Journey Optimization
                 </h3>
                 <div className="w-full h-px bg-white mb-4"></div>
-                <p className="text-white">
+                <p className="text-white text-shadow-sm">
                   Personalized customer journey strategies tailored to your
                   specific audience. We focus on creating seamless experiences
                   that convert visitors into loyal customers.
@@ -262,13 +281,13 @@ export default function Home() {
               </motion.div>
               <motion.div
                 variants={itemVariants}
-                className="bg-white bg-opacity-10 p-6 rounded-lg"
+                className="bg-white bg-opacity-10 p-6 rounded-lg shadow-lg"
               >
-                <h3 className="text-2xl font-semibold text-white mb-4">
+                <h3 className="text-2xl font-semibold text-white mb-4 text-shadow-md">
                   Implementation Support
                 </h3>
                 <div className="w-full h-px bg-white mb-4"></div>
-                <p className="text-white">
+                <p className="text-white text-shadow-sm">
                   We don't just develop strategies; we accompany our clients
                   throughout the implementation process, offering guidance and
                   making periodic adjustments based on detailed analysis.
@@ -276,13 +295,13 @@ export default function Home() {
               </motion.div>
               <motion.div
                 variants={itemVariants}
-                className="bg-white bg-opacity-10 p-6 rounded-lg"
+                className="bg-white bg-opacity-10 p-6 rounded-lg shadow-lg"
               >
-                <h3 className="text-2xl font-semibold text-white mb-4">
+                <h3 className="text-2xl font-semibold text-white mb-4 text-shadow-md">
                   Full-Service Marketing
                 </h3>
                 <div className="w-full h-px bg-white mb-4"></div>
-                <p className="text-white">
+                <p className="text-white text-shadow-sm">
                   For established businesses needing comprehensive marketing
                   solutions, we offer complete implementation of our strategies,
                   handling all aspects of your digital marketing needs.
@@ -290,13 +309,13 @@ export default function Home() {
               </motion.div>
               <motion.div
                 variants={itemVariants}
-                className="bg-white bg-opacity-10 p-6 rounded-lg"
+                className="bg-white bg-opacity-10 p-6 rounded-lg shadow-lg"
               >
-                <h3 className="text-2xl font-semibold text-white mb-4">
+                <h3 className="text-2xl font-semibold text-white mb-4 text-shadow-md">
                   E-commerce Education
                 </h3>
                 <div className="w-full h-px bg-white mb-4"></div>
-                <p className="text-white">
+                <p className="text-white text-shadow-sm">
                   We're passionate about educating our clients on key aspects of
                   digital marketing in e-commerce. Stay informed and ahead in
                   the competitive world of online business.
@@ -308,9 +327,9 @@ export default function Home() {
 
         <section
           id="portfolio"
-          className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-orange-500 to-blue-500 p-8"
+          className="min-h-screen flex flex-col justify-center items-center p-8"
         >
-          <h2 className="text-5xl font-bold text-white text-center mb-12">
+          <h2 className="text-5xl font-bold text-white text-center mb-12 text-shadow-lg">
             Our Portfolio
           </h2>
           <PortfolioCarousel />
@@ -318,21 +337,21 @@ export default function Home() {
 
         <section
           id="blog"
-          className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-500 to-orange-500 p-8"
+          className="min-h-screen flex flex-col justify-center items-center p-8"
         >
           <BlogList />
         </section>
 
         <section
           id="faq"
-          className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-orange-500 to-blue-500 p-8"
+          className="min-h-screen flex flex-col justify-center items-center p-8"
         >
           <FAQ />
         </section>
 
         <section
           id="contact"
-          className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-500 to-orange-500 p-8"
+          className="min-h-screen flex flex-col justify-center items-center p-8"
         >
           <ContactForm />
           <Footer />
