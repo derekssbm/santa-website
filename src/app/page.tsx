@@ -9,6 +9,10 @@ import { useInView } from "react-intersection-observer";
 import Image from "next/image";
 import santa from "../../public/resources/santa.jpg";
 import PortfolioCarousel from "@/components/PortfolioCarousel";
+import BlogList from "@/components/BlogList";
+import FAQ from "@/components/FAQ";
+import ContactForm from "@/components/ContactForm";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<string>("home");
@@ -314,38 +318,25 @@ export default function Home() {
 
         <section
           id="blog"
-          className="h-screen flex justify-center items-center bg-gradient-to-r from-blue-500 to-orange-500"
+          className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-500 to-orange-500 p-8"
         >
-          <Parallax rotate={[-15, 15]}>
-            <h2 className="text-6xl font-bold text-white">Blog Preview</h2>
-          </Parallax>
+          <BlogList />
         </section>
 
         <section
           id="faq"
-          className="h-screen flex justify-center items-center bg-gradient-to-r from-orange-500 to-blue-500"
+          className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-orange-500 to-blue-500 p-8"
         >
-          <Parallax opacity={[0.5, 1]}>
-            <h2 className="text-6xl font-bold text-white">FAQ</h2>
-          </Parallax>
+          <FAQ />
         </section>
 
         <section
           id="contact"
-          className="h-screen flex justify-center items-center bg-gradient-to-r from-blue-500 to-orange-500"
+          className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-500 to-orange-500 p-8"
         >
-          <Parallax translateY={[-50, 50]}>
-            <h2 className="text-6xl font-bold text-white">Contact</h2>
-          </Parallax>
+          <ContactForm />
+          <Footer />
         </section>
-
-        <footer className="h-screen flex justify-center items-center bg-gradient-to-r from-orange-500 to-blue-500">
-          <Parallax speed={-5}>
-            <p className="text-center text-white">
-              &copy; 2024 Solaris Marketing
-            </p>
-          </Parallax>
-        </footer>
       </main>
     </ParallaxProvider>
   );

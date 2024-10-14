@@ -15,41 +15,24 @@ interface PortfolioItem {
 const portfolioItems: PortfolioItem[] = [
   {
     id: 1,
-    title: "E-commerce Optimization",
-    description: "Boosted online sales by 150% through targeted strategies",
+    title: "Email Marketing Revamp",
+    description: "Improved open rates by 75% and click-through rates by 50%",
     imageUrl: "/resources/project1.jpg",
   },
   {
     id: 2,
-    title: "Social Media Campaign",
-    description: "Increased brand engagement by 200% across platforms",
+    title: "Content Marketing Strategy",
+    description: "Generated 500% more leads through strategic content creation",
     imageUrl: "/resources/project2.jpg",
   },
   {
     id: 3,
-    title: "SEO Overhaul",
-    description: "Achieved first page rankings for key industry terms",
-    imageUrl: "/resources/project3.jpg",
-  },
-  {
-    id: 4,
-    title: "Email Marketing Revamp",
-    description: "Improved open rates by 75% and click-through rates by 50%",
-    imageUrl: "/resources/project4.jpg",
-  },
-  {
-    id: 5,
-    title: "Content Marketing Strategy",
-    description: "Generated 500% more leads through strategic content creation",
-    imageUrl: "/resources/project5.jpg",
-  },
-  {
-    id: 6,
     title: "PPC Campaign Management",
     description:
       "Reduced cost per acquisition by 40% while increasing conversions",
-    imageUrl: "/resources/project6.jpg",
+    imageUrl: "/resources/project3.jpg",
   },
+  // ... add more items as needed
 ];
 
 const PortfolioCarousel: React.FC = () => {
